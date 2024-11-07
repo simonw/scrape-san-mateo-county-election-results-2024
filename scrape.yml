@@ -1,0 +1,28 @@
+name: Scrape
+
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+  - cron:  '3,23,43 * * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Scrape smcacre.gov CSV
+      run: |
+        curl -o results.csv 'https://smcacre.gov/media/7514/download?attachment'
+    - name: Commit and push
+      run: |-
+        git config user.name "Automated"
+        git config user.email "actions@users.noreply.github.com"
+        git add -A
+        timestamp=$(date -u)
+        git commit -m "${timestamp}" || exit 0
+        git pull --rebase
+        git push
