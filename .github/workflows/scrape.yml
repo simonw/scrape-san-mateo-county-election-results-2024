@@ -16,7 +16,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Scrape smcacre.gov CSV
       run: |
-        curl -o results.csv 'https://smcacre.gov/media/7514/download?attachment'
+        curl -o results.csv 'https://smcacre.gov/media/7518/download?attachment'
     - name: Commit and push
       run: |-
         git config user.name "Automated"
