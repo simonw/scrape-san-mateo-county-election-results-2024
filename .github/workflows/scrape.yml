@@ -14,9 +14,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+        cache: "pip"
+    - name: Cache Playwright browsers
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/ms-playwright/
+        key: ${{ runner.os }}-browsers
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+    - name: Install Playwright dependencies
+      run: |
+        shot-scraper install
     - name: Scrape smcacre.gov CSV
       run: |
-        curl -o results.csv 'https://smcacre.gov/media/7518/download?attachment'
+        url=(shot-scraper javascript -r \
+          "https://smcacre.gov/elections/november-5-2024-election-results" \
+          "Array.from(document.querySelectorAll('a')).filter(a => a.innerText.includes('Results on CSV'))[0].href")
+        )
+        echo $url
+        curl -o results.csv "$url"
     - name: Commit and push
       run: |-
         git config user.name "Automated"
