@@ -34,7 +34,7 @@ jobs:
       run: |
         url=(shot-scraper javascript -r \
           "https://smcacre.gov/elections/november-5-2024-election-results" \
-          "Array.from(document.querySelectorAll('a')).filter(a => a.innerText.includes('Results on CSV'))[0].href")
+          "Array.from(document.querySelectorAll('a')).filter(a => a.innerText.includes('Results on CSV'))[0].href"
         )
         echo $url
         curl -o results.csv "$url"
