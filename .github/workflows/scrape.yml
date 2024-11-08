@@ -32,12 +32,11 @@ jobs:
         shot-scraper install
     - name: Scrape smcacre.gov CSV
       run: |
-        url=(shot-scraper javascript -r \
+        url=$(shot-scraper javascript -r \
           "https://smcacre.gov/elections/november-5-2024-election-results" \
-          "Array.from(document.querySelectorAll('a')).filter(a => a.innerText.includes('Results on CSV'))[0].href"
-        )
-        echo $url
-        curl -o results.csv "$url"
+          "Array.from(document.querySelectorAll('a')).filter(a => a.innerText.includes('Results on CSV'))[0].href")
+        echo "Found URL: $url"
+        curl -L -o results.csv "$url"
     - name: Commit and push
       run: |-
         git config user.name "Automated"
